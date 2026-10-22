@@ -29,7 +29,7 @@ Beépített mock backend is van, így a felület REAPER nélkül is kipróbálha
 
 ### Főbb jellemzők
 
-- Take kezelés, sávon belül ha veszel újat majd kedvencek közé rakja duplakattal meg zöldre is színezi a sávot ha 63. alkalommal lesz jó a sáv lehessen már látni melyik jó :d
+- Take kezelés, sávon belül ha veszel újat majd kedvencek közé rakja duplakattal meg zöldre is színezi a sávot ha 63. alkalommal lesz jó a felvétel lehessen már látni melyik jó :d
 - Webes UI egyszerű, egyoldalas felülettel
 - Kommunikáció a REAPER-rel a ReaScript API-n keresztül (helyi socket, `python-reapy`)
 - Cserélhető backend: valódi REAPER vagy memóriában futó mock
