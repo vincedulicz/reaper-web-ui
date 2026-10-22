@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reaper Studio Magic</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <link rel="icon" id="favicon" href="{{ url_for('static', filename='doge.png') }}" data-offline="{{ url_for('static', filename='oia-uia.gif') }}">
+</head>
+<body data-min-db="{{ min_db }}" data-max-db="{{ max_db }}" data-backend="{{ backend }}">
+    <header class="top">
+    <h1>REAPER <span>Remote v0.0.1</span><span class="proj-name" id="proj-name" hidden></span></h1>
+    <div class="head-actions">
+      <button type="button" id="btn-open" class="btn small icon" onclick="openOpenProject()" aria-label="Projekt megnyitása" title="Projekt megnyitása">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" id="btn-logout" class="btn small icon" onclick="doLogout()" aria-label="Kilépés" title="Kilépés" hidden>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M16 8l4 4-4 4M20 12H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" id="btn-save" class="btn small icon" onclick="toggleSaveProject()" aria-label="Projekt mentése" title="Projekt mentése">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 3h11l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM8 3v5h7V3M7 21v-7h10v7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="menu-wrap" id="proj-menu" hidden>
+        <button type="button" class="btn small icon" id="proj-btn" aria-label="Megnyitott projektek" title="Megnyitott projektek">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+        <ul class="menu" id="proj-list" hidden></ul>
+      </div>
+    </div>
+    <div class="conn" id="conn"><i class="dot"></i><span id="conn-text">Csatlakozás…</span></div>
+  </header>
+
+    <div id="save-project-overlay" class="modal" hidden>
+      <div class="modal-box">
+        <h3>Projekt mentése</h3>
+        <div class="sub" id="sp-current" style="margin:-6px 0 14px"></div>
+        <div class="field">
+          <label for="sp-name">Projekt neve</label>
+          <input id="sp-name" type="text" placeholder="pl. 2026-10-21_felvetel" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Mappa</label>
+          <div class="breadcrumb" id="sp-breadcrumb"></div>
+          <div class="dir-list" id="sp-dir-list"></div>
+        </div>
+        <label class="check"><input type="checkbox" id="sp-create-subdir" checked><span>Almappa a projektnek</span></label>
+        <label class="check"><input type="checkbox" id="sp-move-media" checked><span>Média másolása a projekt mappába</span></label>
+        <div class="modal-actions">
+          <button id="sp-cancel" class="btn" type="button">Mégse</button>
+          <button id="sp-confirm" class="btn primary" type="button">Mentés</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="login-overlay" class="modal" hidden style="z-index:80">
+    <form class="modal-box" id="login-form">
+      <h3>Belépés</h3>
+      <div class="field">
+        <label for="lg-user">Felhasználónév</label>
+        <input id="lg-user" type="text" autocomplete="username" autocapitalize="none" spellcheck="false">
+      </div>
+      <div class="field">
+        <label for="lg-pass">Jelszó</label>
+        <input id="lg-pass" type="password" autocomplete="current-password">
+      </div>
+      <div class="login-err" id="lg-err"></div>
+      <div class="modal-actions" style="grid-template-columns:1fr">
+        <button class="btn primary" type="submit">Belépés</button>
+      </div>
+    </form>
+  </div>
+ 
+  <main>
+    <section class="card transport">
+      <div class="time-row">
+        <div class="clock">
+          <span id="time">0:00.00</span>
+          <span class="total">/ <span id="total">0:00.00</span></span>
+        </div>
+        <div class="now-take" id="now-take"></div>
+        <span class="pill" id="status" data-status="stopped">Leállítva</span>
+      </div>
+ 
+      <canvas id="wave" class="wave" tabindex="0" role="slider" aria-label="Pozíció (hullámforma)"></canvas>
+ 
+      <div class="wave-tools">
+        <button id="zoom-out" class="btn small" type="button" aria-label="Kicsinyítés" title="Kicsinyítés">−</button>
+        <button id="zoom-in" class="btn small" type="button" aria-label="Nagyítás" title="Nagyítás">+</button>
+        <button id="zoom-fit" class="btn small txt" type="button" title="Vissza az alap nézetre">Auto</button>
+        <span class="sub" id="view-info"></span>
+      </div>
+      <input id="pan" class="pan" type="range" min="0" max="0" step="any" value="0" aria-label="Nézet görgetése">
+ 
+      <form id="goto" class="goto" autocomplete="off">
+        <label for="goto-input">Ugrás ide</label>
+        <input id="goto-input" type="text" inputmode="decimal" placeholder="1:23.50" spellcheck="false">
+        <button id="goto-btn" class="btn small" type="submit">Ugrás</button>
+      </form>
+ 
+      <!--form id="after" class="goto" autocomplete="off">
+        <label for="after-input" title="0 = a felvétel végén marad">Felvétel után ugrás</label>
+        <input id="after-input" type="text" inputmode="decimal" placeholder="5:00" spellcheck="false">
+        <button class="btn small" type="submit">Mentés</button>
+      </form-->
+ 
+      <div class="controls">
+        <button id="btn-start" class="btn start" type="button" aria-label="Ugrás az elejére" title="Ugrás az elejére"><span class="ico"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M21 12H5M12 4.5 4.5 12 12 19.5" fill="none" stroke="currentColor" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="lbl">Elejére</span></button>        <button id="btn-rec" class="btn rec" type="button"><span class="ico">●</span><span class="lbl">Felvétel</span></button>
+        <button id="btn-play" class="btn play" type="button"><span class="ico">▶</span><span class="lbl">Lejátszás</span></button>
+        <button id="btn-stop" class="btn" type="button"><span class="ico">■</span><span class="lbl">Stop</span></button>
+      </div>
+      <p class="hint" id="rec-hint">Válassz egy sávot a felvételhez.</p>
+    </section>
+
+    <section class="card" id="favs-card" hidden>
+      <div class="card-head"><h2>Favorites</h2></div>
+      <ul id="favs"></ul>
+    </section>
+ 
+    <section class="card">
+      <div class="card-head">
+        <h2>Take-ek</h2>
+        <span class="sub">Kártya = ugrás · ▶ = ugrás és lejátszás · kuka = törlés</span>      </div>
+      <ul id="takes"></ul>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Sávok</h2>
+        <span class="sub">● Record ARM · M némít · S solo</span>
+      </div>
+      <ul id="tracks"></ul>
+    </section>
+  </main>
+  <div id="open-project-overlay" class="modal" hidden>
+    <div class="modal-box">
+      <h3>Projekt megnyitása</h3>
+      <div class="seg" role="tablist">
+        <button type="button" class="seg-btn on" data-tab="recent">Legutóbbiak</button>
+        <button type="button" class="seg-btn" data-tab="browse">Tallózás</button>
+        <button type="button" class="seg-btn" data-tab="templates">Sablonok</button>
+      </div>
+      <div class="tab-pane" id="op-recent">
+        <div class="dir-list" id="op-recent-list"></div>
+      </div>
+      <div class="tab-pane" id="op-browse" hidden>
+        <div class="field">
+          <div class="breadcrumb" id="op-breadcrumb"></div>
+          <div class="dir-list" id="op-dir-list"></div>
+        </div>
+      </div>
+      <div class="tab-pane" id="op-templates" hidden>
+        <div class="dir-list" id="op-templates-list"></div>
+      </div>
+      <div class="modal-actions">
+        <button id="op-cancel" class="btn" type="button">Mégse</button>
+      </div>
+    </div>
+  </div>
+    <div id="daw-dialog" class="modal" hidden style="z-index:70">
+    <div class="modal-box" role="alertdialog" aria-modal="true" aria-labelledby="dd-title">
+      <h3 id="dd-title"></h3>
+      <p id="dd-text" style="white-space:pre-wrap"></p>
+      <div class="dd-actions" id="dd-actions"></div>
+    </div>
+  </div>
+    <div id="confirm" class="modal" hidden>
+    <div class="modal-box" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title">
+      <h3 id="confirm-title">Take törlése</h3>
+      <p>Biztos ki akarod törölni ezt a take-et?</p>
+      <div class="modal-name" id="confirm-name"></div>
+      <label class="check">
+        <input type="checkbox" id="confirm-skip">
+        <span>Ne kérdezze meg többször</span>
+      </label>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="confirm-no">Nem</button>
+        <button type="button" class="btn danger" id="confirm-yes">Igen, törlés</button>
+      </div>
+    </div>
+  </div>
+  <div id="offline-card" role="alert" hidden>
+    <img id="offline-gif"
+        src="{{ url_for('static', filename='aaaah-cat.gif') }}"
+        data-default="{{ url_for('static', filename='aaaah-cat.gif') }}"
+        data-loading="{{ url_for('static', filename='oia-uia.gif') }}"
+        alt="">
+    <span>REAPER nem elérhető</span>
+    <button type="button" id="offline-open" class="btn small" onclick="openOpenProject()">
+      Projekt megnyitása
+    </button>
+  </div>
+  <audio id="offline-sound" preload="auto" src="{{ url_for('static', filename='cat-laugh-meme-1.mp3') }}"></audio>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <noscript>A felülethez JavaScript kell.</noscript>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

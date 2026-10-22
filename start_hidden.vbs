@@ -1,0 +1,1 @@
+CreateObject("WScript.Shell").Run "cmd /c cd /d ""C:\YourProjectDir\reaper-web"" && ""C:\YourProjectDir\reaper-web\reaper311_web.venv\Scripts\python.exe"" run.py >> server.log 2>&1", 0, False

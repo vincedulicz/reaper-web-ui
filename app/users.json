@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "username": "LFK",
+      "name": "LazánFaszánKönnyedén",
+      "pass": "123456"
+    },
+    {
+      "username": "AKG",
+      "name": "AzKomGec",
+      "pass": "123456"
+    }
+  ]
+}
