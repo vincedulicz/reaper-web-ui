@@ -43,7 +43,6 @@ Beépített mock backend is van, így a felület REAPER nélkül is kipróbálha
 
 - Python 3.11
 - REAPER (a valódi backendhez)
-- Windows a párbeszédablak-kezeléshez
 
 ### Telepítés
 
@@ -72,7 +71,7 @@ Ezután indítsd újra a REAPER-t. A reapy részletes leírása a [dokumentáci�
 
 ### Felhasználók
 
-A belépés a `users.json` fájlon alapul. Ez a fájl jelszavakhoz kapcsolódó adatokat tartalmaz, ezért **nem kerül fel a repóba** (lásd `.gitignore`). Másold le a mintafájlt, és töltsd ki a saját adataiddal:
+A belépés a `users.json` fájlon alapul. Ez a fájl jelszavakhoz kapcsolódó adatokat tartalmaz. Töltsd ki a saját adataiddal:
 
 ```bash
 cp users.example.json users.json
@@ -145,7 +144,6 @@ böngésző  ->  web.py  ->  services.py  ->  DawBackend  ->  REAPER (reapy) / m
 ### Biztonság
 
 - A felületet csak megbízható hálózaton futtasd, mert a REAPER teljes vezérlését kiadja.
-- Ne commitold a `users.json` fájlt és a session titkos kulcsot.
 
 ### Licenc
 
@@ -153,7 +151,7 @@ MIT licenc, a részleteket lásd a [LICENSE](LICENSE) fájlban.
 
 ### Megjegyzés
 
-Ez egy Claude-dal összehányt, vibekódolt projekt, szóval a kód minősége olyan, amilyen. Cserébe viszonylag könnyedén konfigurálható és átalakítható ugyanazzal a Claude-dal. Működik, másra nem is kell, és csak egy felhasználóra van szabva.
+Ez egy Claude-dal összehányt, vibekódolt projekt, szóval a kód minősége olyan, amilyen. Cserébe viszonylag könnyedén konfigurálható és átalakítható. Működik, másra nem is kell, és csak egy felhasználóra van szabva.
 
 ---
 
@@ -179,7 +177,6 @@ A built-in mock backend is included, so the UI can be tried out and tested witho
 
 - Python 3.11
 - REAPER (for the real backend)
-- Windows for the dialog handling
 
 ### Installation
 
@@ -208,7 +205,7 @@ Then restart REAPER. More details are in the [reapy documentation](https://pytho
 
 ### Users
 
-Login is based on the `users.json` file. It contains password related data, so it is **not committed to the repository** (see `.gitignore`). Copy the example file and fill it in with your own data:
+Login is based on the `users.json` file. It contains password related data. Fill it in with your own data:
 
 ```bash
 cp users.example.json users.json
@@ -289,4 +286,4 @@ MIT license, see the [LICENSE](LICENSE) file for details.
 
 ### Note
 
-This is a vibe-coded mess thrown together with Claude, so code quality is what it is. On the upside, it is fairly easy to configure and rework with the same Claude. It works, nothing more is needed, and it is built for a single user only.
+This is a vibe-coded mess thrown together with Claude, so code quality is what it is. On the upside, it is fairly easy to configure and rework. It works, nothing more is needed, and it is built for a single user only.
