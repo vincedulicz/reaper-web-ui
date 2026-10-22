@@ -92,7 +92,7 @@ A szerver úgy is beállítható, hogy a REAPER indulásakor magától elinduljo
 `start_hidden.vbs` (a projekt mappájában): rejtett ablakban elindítja a szervert, a kimenetet pedig a `server.log` fájlba írja.
 
 ```vbs
-CreateObject("WScript.Shell").Run "cmd /c cd /d ""C:\YourProjectDir\reaper-web"" && ""C:\YourProjectDir\reaper-web\reaper311_web.venv\Scripts\python.exe"" run.py >> server.log 2>&1", 0, False
+CreateObject("WScript.Shell").Run "cmd /c cd /d ""C:\YourProjectDir\reaper-web"" && ""C:\YourProjectDir\reaper-web\venv.venv\Scripts\python.exe"" run.py >> server.log 2>&1", 0, False
 ```
 
 `__startup.lua` (a REAPER Scripts mappájában, jellemzően `%APPDATA%\REAPER\Scripts\`): a REAPER minden induláskor lefuttatja, és ez hívja meg a VBS fájlt.
@@ -226,7 +226,7 @@ The server can be set up to start by itself when REAPER launches, without showin
 `start_hidden.vbs` (in the project folder): starts the server in a hidden window and writes its output to `server.log`.
 
 ```vbs
-CreateObject("WScript.Shell").Run "cmd /c cd /d ""C:\YourProjectDir\reaper-web"" && ""C:\YourProjectDir\reaper-web\reaper311_web.venv\Scripts\python.exe"" run.py >> server.log 2>&1", 0, False
+CreateObject("WScript.Shell").Run "cmd /c cd /d ""C:\YourProjectDir\reaper-web"" && ""C:\YourProjectDir\reaper-web\venv.venv\Scripts\python.exe"" run.py >> server.log 2>&1", 0, False
 ```
 
 `__startup.lua` (in REAPER's Scripts folder, usually `%APPDATA%\REAPER\Scripts\`): REAPER runs it on every startup, and it calls the VBS file.
