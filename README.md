@@ -4,6 +4,23 @@
 
 ---
 
+## Screenshots / Képernyőképek
+
+<table>
+  <tr>
+    <td><img src="docs/images/main1.JPG" alt="Main view" width="100%"></td>
+    <td><img src="docs/images/popup.JPG" alt="Popup" width="100%"></td>
+    <td><img src="docs/images/puts1.JPG" alt="Puts view" width="100%"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/record1.JPG" alt="Record view 1" width="100%"></td>
+    <td><img src="docs/images/record2.JPG" alt="Record view 2" width="100%"></td>
+    <td><img src="docs/images/record3.JPG" alt="Record view 3" width="100%"></td>
+  </tr>
+</table>
+
+---
+
 ## Magyar
 
 Webes kezelőfelület a REAPER-hez. A Flask alapú szerver a [python-reapy](https://github.com/RomeoDespres/reapy) segítségével kommunikál a futó REAPER példánnyal, így a projekt nagy része böngészőből állítható: sávok, hangerők, routing, projekt mentése és a projekt hullámformájának megjelenítése.
