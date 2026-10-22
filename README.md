@@ -74,7 +74,7 @@ Ezután indítsd újra a REAPER-t. A reapy részletes leírása a [dokumentáci�
 A belépés a `users.json` fájlon alapul. Ez a fájl jelszavakhoz kapcsolódó adatokat tartalmaz. Töltsd ki a saját adataiddal:
 
 ```bash
-cp users.example.json users.json
+cp dummy_users.json users.json
 ```
 
 ### Indítás
@@ -208,7 +208,7 @@ Then restart REAPER. More details are in the [reapy documentation](https://pytho
 Login is based on the `users.json` file. It contains password related data. Fill it in with your own data:
 
 ```bash
-cp users.example.json users.json
+cp dummy_users.json users.json
 ```
 
 ### Running
